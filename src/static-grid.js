@@ -9,7 +9,8 @@ define([
 		options: {
 			itemSelector: '.static-grid-item',
             itemMargin: 0,
-			imageSelector: '.static-grid-item .image',
+            imageContainerSelector: '.static-grid-item .image',
+			imageSelector: '.static-grid-item .image img',
             imageRate: 1,
             imageCol: 4,
             imagePosition: 'inner',
@@ -27,7 +28,7 @@ define([
 
             $(window).resize(function() {
                 self.setItemsSize();
-                self.$el.find(self.options.imageSelector + ' img').each(function() {
+                self.$el.find(self.options.imageSelector).each(function() {
                     self.setImageSize(this);
                 });      
             });     
@@ -126,7 +127,15 @@ define([
                 var ww = $(img).parent().width();
                 
                 if (wi != ww) {
-                    $(img).css('marginLeft',parseInt((ww - wi) / 2) + 'px');
+                    var align = $(img).attr('data-align');
+                    console.log(align);
+                    switch (align) {
+                        case 'left': align = 0; break;
+                        case 'right': align = ww - wi; break;
+                        default:
+                            align = parseInt((ww - wi) / 2);
+                    }
+                    $(img).css('marginLeft',align + 'px');
 
                 }
                 var hi = $(img).height();
