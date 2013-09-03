@@ -128,7 +128,6 @@ define([
                 
                 if (wi != ww) {
                     var align = $(img).attr('data-align');
-                    console.log(align);
                     switch (align) {
                         case 'left': align = 0; break;
                         case 'right': align = ww - wi; break;
