@@ -14,24 +14,31 @@ define([
             imageRate: 1,
             imageCol: 4,
             imagePosition: 'inner',
-            
 		},        
     
         initialize: function() {
             var self = this;
 
             this.parseOptions();
-            
             this.$el.addClass('c'+this.options.imageCol);
-
             this.setItemsSize();
-
-            $(window).resize(function() {
-                self.setItemsSize();
-                self.$el.find(self.options.imageSelector).each(function() {
-                    self.setImageSize(this);
-                });      
-            });     
+            
+            if (true == ('onorientationchange' in window)) {
+                $(window).on('orientationchange', function() {
+                    self.setItemsSize();
+                    self.$el.find(self.options.imageSelector).each(function() {
+                        self.setImageSize(this);
+                    });                 
+                });
+            }            
+            else {
+                $(window).resize(function() {
+                    self.setItemsSize();
+                    self.$el.find(self.options.imageSelector).each(function() {
+                        self.setImageSize(this);
+                    });      
+                });   
+            }
         },
         
         
@@ -52,7 +59,7 @@ define([
             if (sum > totalWidth) {
                 itemWidth = itemWidth - 1;
             }
-            var itemHeight = parseInt(itemWidth / this.options.imageRate);
+            var itemHeight = this.options.imageRate > 0 ? parseInt(itemWidth / this.options.imageRate) : 0;
             return {itemWidth: itemWidth, itemHeight: itemHeight, totalWidth: totalWidth}
         },
         
@@ -77,7 +84,8 @@ define([
                 
                 var img = $(this).find('.image');
                 
-                $(img).height(itemSize.itemHeight); 
+                if (itemSize.itemHeight > 0) 
+                    $(img).height(itemSize.itemHeight); 
                 
                 var imageWidth = parseInt($(img).attr('data-width'));
                 var imageHeight = parseInt($(img).attr('data-height'));
