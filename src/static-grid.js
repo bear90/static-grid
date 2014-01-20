@@ -149,9 +149,11 @@ define([
                 var hw = $(img).parent().height();
 
                 if (hi != hw) {
-                    $(img).css('marginTop',parseInt((hw - hi) / 2) + 'px');  
-                }                    
-            }            
+                    $(img).css('marginTop',parseInt((hw - hi) / 2) + 'px');
+                }
+            }
+            
+            $(img).trigger('render:finish');
         },
         
         render: function() {
